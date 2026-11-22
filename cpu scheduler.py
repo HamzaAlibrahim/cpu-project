@@ -1,5 +1,3 @@
-"""CPU scheduling: FCFS vs SJF (non-preemptive), with comparison."""
-
 # (name, arrival, burst)
 PROCESSES = [
     ("P1", 0, 9),
