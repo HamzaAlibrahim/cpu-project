@@ -10,10 +10,10 @@ PROCESSES = [
  
 def fcfs(procs):
     """First-Come First-Served: run in order of arrival"""
-    order = sorted(procs, key=lambda p: p[1])  # sorted() is stable
+    order = sorted(procs, key=lambda p: p[1])  # ترتيب العمليات 
     time, gantt, info = 0, [], {}
     for name, arr, burst in order:
-        if time < arr:                      # CPU idle until the process arrives
+        if time < arr:                      # المعالج في حالة خمول: الانتظار حتى وصول العملية التالية
             gantt.append(("idle", time, arr))
             time = arr
         start, end = time, time + burst
@@ -30,12 +30,12 @@ def sjf(procs):
     time, gantt, info = 0, [], {}
     while remaining:
         ready = [p for p in remaining if p[1] <= time]
-        if not ready:                       # nothing has arrived: jump ahead
+        if not ready:                       # لم يكن هناك أي عملية جاهزة، انتظر حتى وصول العملية التالية
             nxt = min(p[1] for p in remaining)
             gantt.append(("idle", time, nxt))
             time = nxt
             continue
-        p = min(ready, key=lambda x: (x[2], x[1]))  # min() keeps first on ties
+        p = min(ready, key=lambda x: (x[2], x[1]))  # اختر العملية ذات وقت التنفيذ الأصغر، مع كسر التعادل حسب وقت الوصول
         name, arr, burst = p
         start, end = time, time + burst
         gantt.append((name, start, end))
@@ -49,13 +49,13 @@ def metrics(info):
     rows = []
     for name, (arr, burst, start, end) in info.items():
         tat = end - arr
-        rows.append((name, end, tat, tat - burst, start - arr))
-    rows.sort(key=lambda r: int(r[0][1:]))
+        rows.append((name, end, tat, tat - burst, start - arr)) # Wt = tat - burst, Rt = start - arr
+    rows.sort(key=lambda r: int(r[0][1:])) # ترتيب العمليات حسب اسمها 
     n = len(rows)
     avg = (
-        sum(r[3] for r in rows) / n,   # waiting
-        sum(r[2] for r in rows) / n,   # turnaround
-        sum(r[4] for r in rows) / n,   # response
+        sum(r[3] for r in rows) / n,   # الانتظار
+        sum(r[2] for r in rows) / n,   # الاستدارة
+        sum(r[4] for r in rows) / n,   # الاستجابة
     )
     return rows, avg
 
