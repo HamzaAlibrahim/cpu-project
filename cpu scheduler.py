@@ -7,10 +7,9 @@ PROCESSES = [
     ("P5", 4, 8),
     ("P6", 6, 6),
 ]
-
-
+ 
 def fcfs(procs):
-    """First-Come First-Served: run in order of arrival (ties by input order)."""
+    """First-Come First-Served: run in order of arrival"""
     order = sorted(procs, key=lambda p: p[1])  # sorted() is stable
     time, gantt, info = 0, [], {}
     for name, arr, burst in order:
